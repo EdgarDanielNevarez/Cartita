@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control de Acceso</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #333;
+        }
+        
+        .keypad-container {
+            width: 300px;
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            position: relative;
+        }
+        
+        .display-panel {
+            background-color: #000;
+            height: 40px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .led-display {
+            height: 100%;
+            background-color: #000;
+            color: #f00;
+            font-family: 'Courier New', monospace;
+            font-size: 18px;
+            text-align: center;
+            line-height: 40px;
+            letter-spacing: 4px;
+            overflow: hidden;
+            padding: 0 5px;
+        }
+        
+        .keypad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .key {
+            background: linear-gradient(to bottom, #ffffff, #e0e0e0);
+            border: 1px solid #999;
+            border-radius: 5px;
+            height: 50px;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: all 0.1s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .key:active {
+            transform: translateY(2px);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+            background: linear-gradient(to bottom, #e0e0e0, #d0d0d0);
+        }
+        
+        .special-key {
+            background: linear-gradient(to bottom, #f0f0f0, #d0d0d0);
+        }
+        
+        .keypad-screws {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #999;
+            border-radius: 50%;
+            box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.5);
+        }
+        
+        .screw-1 {
+            top: 10px;
+            left: 10px;
+        }
+        
+        .screw-2 {
+            top: 10px;
+            right: 10px;
+        }
+        
+        .screw-3 {
+            bottom: 10px;
+            left: 10px;
+        }
+        
+        .screw-4 {
+            bottom: 10px;
+            right: 10px;
+        }
+        
+        .message {
+            text-align: center;
+            height: 20px;
+            margin-top: 15px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0.3; }
+            100% { opacity: 1; }
+        }
+        
+        .blinking {
+            animation: blink 1s infinite;
+        }
+        
+        .access-granted {
+            color: #0c0;
+        }
+        
+        .access-denied {
+            color: #f00;
+        }
+    </style>
+</head>
+<body>
+    <div class="keypad-container">
+        <div class="keypad-screws screw-1"></div>
+        <div class="keypad-screws screw-2"></div>
+        <div class="keypad-screws screw-3"></div>
+        <div class="keypad-screws screw-4"></div>
+        
+        <div class="display-panel">
+            <div id="display" class="led-display">--------</div>
+        </div>
+        
+        <div class="keypad">
+            <button class="key" onclick="addDigit('7')">7</button>
+            <button class="key" onclick="addDigit('8')">8</button>
+            <button class="key" onclick="addDigit('9')">9</button>
+            <button class="key" onclick="addDigit('4')">4</button>
+            <button class="key" onclick="addDigit('5')">5</button>
+            <button class="key" onclick="addDigit('6')">6</button>
+            <button class="key" onclick="addDigit('1')">1</button>
+            <button class="key" onclick="addDigit('2')">2</button>
+            <button class="key" onclick="addDigit('3')">3</button>
+            <button class="key special-key" onclick="clearEntry()">E</button>
+            <button class="key" onclick="addDigit('0')">0</button>
+            <button class="key special-key" onclick="checkCode()">R</button>
+        </div>
+        
+        <div class="message" id="message"></div>
+    </div>
+    
+    <script>
+        let code = "";
+        const correctCode = "28052024"; // Sin barras para que sea más parecido a un teclado de acceso real
+        const display = document.getElementById("display");
+        const message = document.getElementById("message");
+        
+        function addDigit(digit) {
+            if (code.length < 8) {
+                code += digit;
+                updateDisplay();
+            }
+        }
+        
+        function updateDisplay() {
+            let displayText = "";
+            for (let i = 0; i < 8; i++) {
+                if (i < code.length) {
+                    displayText += "*";
+                } else {
+                    displayText += "-";
+                }
+            }
+            display.textContent = displayText;
+        }
+        
+        function clearEntry() {
+            code = "";
+            updateDisplay();
+            message.textContent = "";
+            display.classList.remove("blinking", "access-granted", "access-denied");
+        }
+        
+        function checkCode() {
+            if (code === correctCode) {
+                display.textContent = "ACCESO";
+                display.classList.add("blinking", "access-granted");
+                message.textContent = "Acceso permitido";
+                setTimeout(() => {
+                    window.location.href = "carta.html";
+                }, 2000);
+            } else {
+                display.textContent = "ERROR";
+                display.classList.add("blinking", "access-denied");
+                message.textContent = "Código incorrecto";
+                setTimeout(() => {
+                    clearEntry();
+                }, 1500);
+            }
+        }
+        
+        // Inicializar display
+        updateDisplay();
+        
+        // Soporte para teclado
+        document.addEventListener("keydown", function(event) {
+            const key = event.key;
+            if (/^[0-9]$/.test(key)) {
+                addDigit(key);
+            } else if (key === "Enter") {
+                checkCode();
+            } else if (key === "Backspace" || key === "Delete" || key === "e" || key === "E") {
+                clearEntry();
+            } else if (key === "r" || key === "R") {
+                checkCode();
+            }
+        });
+    </script>
+</body>
+</html>

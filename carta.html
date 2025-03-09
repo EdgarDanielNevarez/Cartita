@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carta con fondo estrellado</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: black;
+            overflow: hidden;
+            position: relative;
+        }
+
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .carta-container {
+            position: relative;
+            padding: 30px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            margin: 40px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            background: transparent;
+            border: none;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 255, 255, 0) transparent;
+        }
+
+        /* Estilos para scrollbar en navegadores webkit (Chrome, Safari) */
+        .carta-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .carta-container::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .carta-container::-webkit-scrollbar-thumb {
+            background-color: rgba(255, 255, 255, 0);
+            border-radius: 10px;
+        }
+
+        @font-face {
+            font-family: 'PlaywriteITModerna';
+            src: url('PlaywriteITModerna-ExtraLight.ttf') format('truetype');
+            /* Puedes agregar más formatos si dispones de ellos */
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        .carta-texto {
+            font-family: 'PlaywriteITModerna', sans-serif;
+            font-size: 16px;
+            line-height: 1.3;
+            text-align: center;
+            animation: cambioColorTexto 8s infinite alternate ease-in-out;
+            padding: 9px;
+        }
+
+        @media (max-width: 768px) {
+            .carta-texto {
+                font-size: 10px;
+                padding: 5px;
+            }
+            
+            .carta-container {
+                padding: 20px;
+                width: 95%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .carta-texto {
+                font-size: 15px;
+                line-height: 1.5;
+            }
+            
+            .carta-container {
+                padding: 15px;
+                width: 98%;
+            }
+        }
+
+        @keyframes cambioColorTexto {
+            0% { color: white; }
+            25% { color: lightblue; }
+            50% { color: lightpink; }
+            75% { color: violet; }
+            100% { color: cyan; }
+        }
+
+        /* Estilos para el control de música */
+        .music-control {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 20;
+            transition: all 0.3s ease;
+        }
+
+        .music-control:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .music-icon {
+            width: 20px;
+            height: 20px;
+            position: relative;
+        }
+
+        .music-on .bar1, .music-on .bar2, .music-on .bar3 {
+            position: absolute;
+            bottom: 0;
+            width: 4px;
+            background-color: white;
+            animation: sound 1.5s infinite ease-in-out;
+        }
+
+        .music-on .bar1 {
+            height: 15px;
+            left: 0;
+            animation-delay: 0.2s;
+        }
+
+        .music-on .bar2 {
+            height: 20px;
+            left: 8px;
+            animation-delay: 0.8s;
+        }
+
+        .music-on .bar3 {
+            height: 10px;
+            left: 16px;
+            animation-delay: 0.5s;
+        }
+
+        .music-off .line1, .music-off .line2 {
+            position: absolute;
+            width: 20px;
+            height: 2px;
+            background-color: white;
+            top: 50%;
+            left: 0;
+        }
+
+        .music-off .line1 {
+            transform: rotate(45deg);
+        }
+
+        .music-off .line2 {
+            transform: rotate(-45deg);
+        }
+
+        @keyframes sound {
+            0% { height: 5px; }
+            50% { height: 20px; }
+            100% { height: 5px; }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="fondo"></canvas>
+    <div class="carta-container">
+        <div class="carta-texto">
+            <p>En este largo camino que se llama vida, uno rara vez se detiene a observar lo bello que es el firmamento estelar. Pero en aquella ocasión me detuve, y lo que presencié fue una estrella que no solo brillaba con intensidad, sino que era hermosa. Una estrella que, por su forma de resplandecer, opacaba a todas las demás.</p>
+            <p>Y en ese momento comprendí que esa estrella, tan única y radiante, eras tú. Cada día que paso a tu lado me doy cuenta de cuán afortunado soy por haberte encontrado, por tenerte a mi lado.</p>
+            <p>Tu luz ilumina mi vida de una manera que no creí posible, y me haces ver lo hermoso en lo cotidiano, lo especial en lo que antes pasaba desapercibido. Eres mi estrella en un cielo lleno de luces, pero ninguna tan brillante como la tuya.</p>
+            <p>Cuando estoy contigo, el tiempo parece detenerse, y todo lo que importa es el momento presente. Tu risa, tus abrazos, las pequeñas cosas que compartimos, me llenan de una felicidad que nunca imaginé sentir. Gracias por ser esa estrella que me guía, que me inspira y que me hace querer ser mejor cada día.</p>
+            <p>Quiero seguir caminando a tu lado, observando juntos este hermoso firmamento, sabiendo que en este vasto universo, nos encontramos el uno al otro.</p>
+        </div>
+    </div>
+
+    <div class="music-control" id="musicControl">
+        <div class="music-icon music-on" id="musicIconOn">
+            <div class="bar1"></div>
+            <div class="bar2"></div>
+            <div class="bar3"></div>
+        </div>
+        <div class="music-icon music-off" id="musicIconOff" style="display: none;">
+            <div class="line1"></div>
+            <div class="line2"></div>
+        </div>
+    </div>
+
+    <audio id="bgMusic" loop>
+        <!-- Reemplaza este enlace por la URL de tu música -->
+        <source src="https://www.youtube.com/watch?v=uNCGM7FJ8wQ&ab_channel=C418-Topic" type="audio/mp3">
+        Tu navegador no soporta el elemento de audio.
+    </audio>
+
+    <script>
+        const canvas = document.getElementById("fondo");
+        const ctx = canvas.getContext("2d");
+        const bgMusic = document.getElementById("bgMusic");
+        const musicControl = document.getElementById("musicControl");
+        const musicIconOn = document.getElementById("musicIconOn");
+        const musicIconOff = document.getElementById("musicIconOff");
+        let musicPlaying = false;
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let estrellas = [];
+        let estrellasFugaces = [];
+        const pixelSize = 4; // Tamaño de los "píxeles" para el efecto pixelado
+        let colorCycle = 0; // Variable para ciclar colores
+
+        // Array de colores para transición
+        const paletaColores = [
+            { r: 255, g: 255, b: 255 }, // Blanco
+            { r: 173, g: 216, b: 230 }, // Azul claro
+            { r: 255, g: 182, b: 193 }, // Rosa claro
+            { r: 238, g: 130, b: 238 }, // Violeta
+            { r: 135, g: 206, b: 250 }, // Celeste
+            { r: 152, g: 251, b: 152 }, // Verde claro
+            { r: 255, g: 215, b: 0 }    // Dorado
+        ];
+
+        // Configuración de audio
+        bgMusic.volume = 0.5; // Volumen al 50%
+
+        // Control de música
+        musicControl.addEventListener("click", toggleMusic);
+
+        // Iniciar música automáticamente solo cuando el usuario interactúe con la página
+        document.addEventListener("click", function() {
+            if (!musicPlaying) {
+                toggleMusic();
+            }
+        }, { once: true });
+
+        function toggleMusic() {
+            if (musicPlaying) {
+                bgMusic.pause();
+                musicIconOn.style.display = "none";
+                musicIconOff.style.display = "block";
+            } else {
+                bgMusic.play().catch(e => console.log("Error al reproducir música:", e));
+                musicIconOn.style.display = "block";
+                musicIconOff.style.display = "none";
+            }
+            musicPlaying = !musicPlaying;
+        }
+
+        // Función para interpolar entre dos colores
+        function interpolateColor(color1, color2, factor) {
+            if (factor > 1) factor = 1;
+            if (factor < 0) factor = 0;
+            
+            const r = Math.round(color1.r + factor * (color2.r - color1.r));
+            const g = Math.round(color1.g + factor * (color2.g - color1.g));
+            const b = Math.round(color1.b + factor * (color2.b - color1.b));
+            
+            return `rgba(${r}, ${g}, ${b}`;
+        }
+
+        // Función para obtener un color actual basado en el ciclo
+        function obtenerColorActual(opacidad) {
+            const totalColores = paletaColores.length;
+            const posicionActual = colorCycle % totalColores;
+            const siguientePosicion = (posicionActual + 1) % totalColores;
+            
+            const factorColor = colorCycle % 1; // Parte decimal para transición suave
+            
+            const colorInicial = paletaColores[Math.floor(posicionActual)];
+            const colorFinal = paletaColores[Math.floor(siguientePosicion)];
+            
+            return `${interpolateColor(colorInicial, colorFinal, factorColor)}, ${opacidad})`;
+        }
+
+        function crearEstrellas() {
+            for (let i = 0; i < 100; i++) {
+                estrellas.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    radio: Math.random() * 2,
+                    opacidadBase: Math.random() * 0.5 + 0.4, // Opacidad base entre 0.4 y 0.9
+                    velocidadParpadeo: Math.random() * 0.003 + 0.001, // Velocidad de parpadeo MUY lenta
+                    factorParpadeo: Math.random() // Fase inicial del parpadeo
+                });
+            }
+
+            for (let i = 0; i < 3; i++) {
+                estrellasFugaces.push({
+                    x: Math.random() * canvas.width * 0.2, // Inicia más a la izquierda
+                    y: Math.random() * canvas.height * 0.5,
+                    velocidad: 1.5 + Math.random() * 1.2, // Velocidad aumentada
+                    longitud: 12 + Math.random() * 8, // Longitud en número de píxeles
+                    opacidad: Math.random() * 0.3 + 0.7, // Opacidad entre 0.7 y 1
+                    tamano: Math.floor(Math.random() * 3) + 3, // Tamaño variable para la cabeza
+                    offsetColor: Math.random() * 2 // Offset para variedad de colores
+                });
+            }
+        }
+
+        function dibujarEstrellas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Incrementar ciclo de color
+            colorCycle += 0.005; // Velocidad del cambio de color
+            if (colorCycle >= paletaColores.length) {
+                colorCycle = 0;
+            }
+
+            // Dibujar estrellas fijas con cambio de color y parpadeo tenue
+            estrellas.forEach(estrella => {
+                // Actualizar parpadeo muy lento
+                estrella.factorParpadeo += estrella.velocidadParpadeo;
+                if (estrella.factorParpadeo > 1) estrella.factorParpadeo = 0;
+                
+                // Opacidad variable con parpadeo muy sutil (solo varía un 20% de la opacidad base)
+                const opacidadActual = estrella.opacidadBase * (0.9 + Math.sin(estrella.factorParpadeo * Math.PI * 2) * 0.1);
+                
+                // Color cambiante con el tiempo
+                ctx.fillStyle = obtenerColorActual(opacidadActual);
+                ctx.globalAlpha = 1;
+                ctx.beginPath();
+                ctx.arc(estrella.x, estrella.y, estrella.radio, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            // Dibujar estrellas fugaces con cambio de color
+            estrellasFugaces.forEach((estrella, index) => {
+                estrella.x += estrella.velocidad;
+                estrella.y += estrella.velocidad * 0.2; // Movimiento más horizontal que diagonal
+                
+                // Color principal con ciclo de color + offset para variedad
+                const colorBase = (colorCycle + estrella.offsetColor) % paletaColores.length;
+                const colorIdx = Math.floor(colorBase);
+                const nextColorIdx = (colorIdx + 1) % paletaColores.length;
+                const factor = colorBase - colorIdx;
+                
+                const colorPrincipal = interpolateColor(
+                    paletaColores[colorIdx], 
+                    paletaColores[nextColorIdx], 
+                    factor
+                );
+                
+                // Dibujar cabeza de la estrella fugaz (redondeada)
+                ctx.fillStyle = `${colorPrincipal}, ${estrella.opacidad})`;
+                ctx.globalAlpha = estrella.opacidad;
+                ctx.beginPath();
+                ctx.arc(estrella.x, estrella.y, pixelSize * (estrella.tamano/2), 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Dibujar un centro más brillante
+                ctx.fillStyle = `rgba(255, 255, 255, ${estrella.opacidad})`;
+                ctx.beginPath();
+                ctx.arc(estrella.x, estrella.y, pixelSize * (estrella.tamano/4), 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Dibujar la cola con círculos que se hacen más pequeños
+                for (let i = 1; i <= estrella.longitud; i++) {
+                    const opacity = (estrella.longitud - i) / estrella.longitud * estrella.opacidad;
+                    ctx.globalAlpha = opacity;
+                    
+                    // Color con ligera variación basada en la posición
+                    const colorVariacion = interpolateColor(
+                        paletaColores[colorIdx], 
+                        paletaColores[nextColorIdx], 
+                        factor + (i / estrella.longitud) * 0.3
+                    );
+                    
+                    ctx.fillStyle = `${colorVariacion}, ${opacity})`;
+                    
+                    // Tamaño decreciente para la cola
+                    const tailSize = Math.max(1, (estrella.tamano/2) * (1 - i / (estrella.longitud * 1.2)));
+                    
+                    const tailX = estrella.x - i * pixelSize * 1.5;
+                    const tailY = estrella.y - i * pixelSize * 0.3;
+                    
+                    // Dibujar círculos para una cola más redondeada
+                    ctx.beginPath();
+                    ctx.arc(tailX, tailY, pixelSize * tailSize, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    // Añadir algunos círculos más pequeños alrededor para efecto pixelado pero redondeado
+                    if (i > 2 && i < estrella.longitud - 2 && Math.random() > 0.7) {
+                        ctx.beginPath();
+                        ctx.arc(
+                            tailX + (Math.random() * pixelSize * 2 - pixelSize), 
+                            tailY + (Math.random() * pixelSize * 2 - pixelSize),
+                            pixelSize * tailSize * 0.5, 
+                            0, 
+                            Math.PI * 2
+                        );
+                        ctx.fill();
+                    }
+                }
+
+                // Si sale de la pantalla, reiniciar su posición
+                if (estrella.x > canvas.width || estrella.y > canvas.height) {
+                    estrellasFugaces[index] = {
+                        x: Math.random() * canvas.width * 0.2,
+                        y: Math.random() * canvas.height * 0.5,
+                        velocidad: 1.5 + Math.random() * 1.2, // Velocidad aumentada
+                        longitud: 12 + Math.random() * 8,
+                        opacidad: Math.random() * 0.3 + 0.7,
+                        tamano: Math.floor(Math.random() * 3) + 3,
+                        offsetColor: Math.random() * 2 // Offset para variedad de colores
+                    };
+                }
+            });
+
+            ctx.globalAlpha = 1; // Restablecer opacidad
+        }
+
+        function animar() {
+            dibujarEstrellas();
+            requestAnimationFrame(animar);
+        }
+
+        crearEstrellas();
+        animar();
+
+        // Ajustar tamaño del canvas si cambia el tamaño de la ventana
+        window.addEventListener("resize", () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            estrellas = [];
+            estrellasFugaces = [];
+            crearEstrellas();
+        });
+    </script>
+</body>
+</html>
