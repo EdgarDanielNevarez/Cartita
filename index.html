@@ -165,7 +165,8 @@
     
     <script>
         let code = "";
-        const correctCode = "28052024"; // Sin barras para que sea más parecido a un teclado de acceso real
+        const correctCode1 = "28052024"; // Código para la primera carta
+        const correctCode2 = "14032025"; // Código para la nueva carta con luna de sangre
         const display = document.getElementById("display");
         const message = document.getElementById("message");
         
@@ -196,12 +197,19 @@
         }
         
         function checkCode() {
-            if (code === correctCode) {
+            if (code === correctCode1) {
                 display.textContent = "ACCESO";
                 display.classList.add("blinking", "access-granted");
                 message.textContent = "Acceso permitido";
                 setTimeout(() => {
                     window.location.href = "carta.html";
+                }, 2000);
+            } else if (code === correctCode2) {
+                display.textContent = "ACCESO";
+                display.classList.add("blinking", "access-granted");
+                message.textContent = "Acceso permitido";
+                setTimeout(() => {
+                    window.location.href = "luna.html";
                 }, 2000);
             } else {
                 display.textContent = "ERROR";
