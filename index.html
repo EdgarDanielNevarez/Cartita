@@ -167,6 +167,7 @@
         let code = "";
         const correctCode1 = "28052024"; // Código para la primera carta
         const correctCode2 = "14032025"; // Código para la nueva carta con luna de sangre
+        const correctCode3 = "24042025"; // Código para tiempo
         const display = document.getElementById("display");
         const message = document.getElementById("message");
         
@@ -210,6 +211,13 @@
                 message.textContent = "Acceso permitido";
                 setTimeout(() => {
                     window.location.href = "luna.html";
+                }, 2000);
+            } else if (code === correctCode3) {
+                display.textContent = "ACCESO";
+                display.classList.add("blinking", "access-granted");
+                message.textContent = "Acceso permitido";
+                setTimeout(() => {
+                    window.location.href = "tiempo.html";
                 }, 2000);
             } else {
                 display.textContent = "ERROR";
