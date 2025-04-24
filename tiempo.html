@@ -20,11 +20,12 @@
 
         body {
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background-color: #000000;
-            overflow: hidden;
+            background-color: #0e0e0e; /* Negro puro para coincidir con el GIF */
+            overflow-x: hidden;
             position: relative;
             font-family: 'PlaywriteITModerna', sans-serif;
         }
@@ -38,13 +39,28 @@
             z-index: 1;
         }
 
+        .gif-container {
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .gif-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
         .carta-container {
             position: relative;
-            padding: 30px;
+            padding: 0 30px 30px;
             width: 90%;
             max-width: 600px;
-            max-height: 80vh;
-            margin: 40px 0;
+            margin: 0 auto;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -78,6 +94,7 @@
             text-align: center;
             animation: cambioColorTexto 12s infinite alternate ease-in-out;
             padding: 10px;
+            color: #7DF9FF; /* Color inicial de texto */
         }
 
         @media (max-width: 768px) {
@@ -87,8 +104,12 @@
             }
             
             .carta-container {
-                padding: 20px;
+                padding: 0 20px 20px;
                 width: 95%;
+            }
+            
+            .gif-container {
+                max-width: 500px;
             }
         }
 
@@ -99,8 +120,12 @@
             }
             
             .carta-container {
-                padding: 15px;
+                padding: 0 15px 15px;
                 width: 98%;
+            }
+            
+            .gif-container {
+                max-width: 400px;
             }
         }
 
@@ -187,23 +212,45 @@
             50% { height: 20px; }
             100% { height: 5px; }
         }
+
+        /* Contenedor principal para mantener todo organizado */
+        .contenido-principal {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 600px;
+            position: relative;
+            z-index: 10;
+        }
     </style>
 </head>
 <body>
+    <!-- Canvas para el fondo de estrellas animadas -->
     <canvas id="fondo"></canvas>
     
-    <div class="carta-container">
-        <div class="carta-texto">
-            <p>Wow, ya casi un año. Es impresionante… siento que ha sido un gran viaje hasta aquí, pero a la vez muy corto. Es curioso, pero cuando estoy contigo, parece que todo se detiene y nada importa. Y, al mismo tiempo, el tiempo se acelera, y lo que pareció solo cinco minutos, fueron horas y horas.</p>
-            <br>
-            <p>Las citas que hemos tenido a las cuales siempre llegamos al mismo lugar son simplemente impresionantes, porque en cada una de ellas, pese a terminar en el mismo sitio, recorrimos un camino diferente, con distintas pláticas y diferentes emociones.</p>
-            <br>
-            <p>Pese a lo efímero que se ha vuelto el mundo, yo quiero persistir a tu lado. Quiero seguir escuchando sobre las diabluras que lees, tus ideas, tus experiencias, tus sentimientos, algunas de tus indecisiones… y ver cómo sigues creciendo como persona.</p>
-            <br>
-            <p>Tal vez solo… estar a tu lado.</p>
+    <!-- Contenedor principal para mejor organización -->
+    <div class="contenido-principal">
+        <!-- Contenedor del GIF -->
+        <div class="gif-container">
+            <img src="Hologram_Galaxy.gif" alt="Estrellas animadas">
+        </div>
+        
+        <!-- Contenedor de la carta -->
+        <div class="carta-container">
+            <div class="carta-texto">
+                <p>Wow, ya casi un año. Es impresionante… siento que ha sido un gran viaje hasta aquí, pero a la vez muy corto. Es curioso, pero cuando estoy contigo, parece que todo se detiene y nada importa. Y, al mismo tiempo, el tiempo se acelera, y lo que pareció solo cinco minutos, fueron horas y horas.</p>
+                <br>
+                <p>Las citas que hemos tenido a las cuales siempre llegamos al mismo lugar son simplemente impresionantes, porque en cada una de ellas, pese a terminar en el mismo sitio, recorrimos un camino diferente, con distintas pláticas y diferentes emociones.</p>
+                <br>
+                <p>Pese a lo efímero que se ha vuelto el mundo, yo quiero persistir a tu lado. Quiero seguir escuchando sobre las diabluras que lees, tus ideas, tus experiencias, tus sentimientos, algunas de tus indecisiones… y ver cómo sigues creciendo como persona.</p>
+                <br>
+                <p>Tal vez solo… estar a tu lado.</p>
+            </div>
         </div>
     </div>
 
+    <!-- Control de música -->
     <div class="music-control" id="musicControl">
         <div class="music-icon music-on" id="musicIconOn">
             <div class="bar1"></div>
@@ -218,7 +265,7 @@
 
     <audio id="bgMusic" loop>
         <!-- Reemplaza este enlace por la URL de tu música -->
-        <source src="https://example.com/music.mp3" type="audio/mp3">
+        <source src="M54.mp3" type="audio/mp3">
         Tu navegador no soporta el elemento de audio.
     </audio>
 
@@ -231,16 +278,21 @@
         const musicIconOff = document.getElementById("musicIconOff");
         let musicPlaying = false;
 
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+        // Ajuste para asegurar que el canvas cubra toda la página
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        
+        resizeCanvas();
 
         let estrellas = [];
         const pixelSize = 4; // Tamaño de los "píxeles" para el efecto pixelado
         let colorCycle = 0; // Variable para ciclar colores
 
-        // Array de colores para las estrellas azules
+        // Array de colores para las estrellas azules - usando tonalidades que coincidan con el GIF
         const paletaColores = [
-            { r: 0, g: 255, b: 255 },    // Aqua
+            { r: 0, g: 255, b: 255 },    // Aqua - igual al del GIF
             { r: 32, g: 178, b: 170 },   // Light Sea Green
             { r: 64, g: 224, b: 208 },   // Turquoise
             { r: 0, g: 206, b: 209 },    // Dark Turquoise
@@ -300,7 +352,10 @@
         }
 
         function crearEstrellas() {
-            for (let i = 0; i < 200; i++) {
+            estrellas = []; // Limpiar estrellas existentes
+            
+            // Crear menos estrellas para evitar sobrecargar visualmente con el GIF
+            for (let i = 0; i < 150; i++) {
                 estrellas.push({
                     x: Math.random() * canvas.width,
                     y: Math.random() * canvas.height,
@@ -373,9 +428,7 @@
 
         // Ajustar tamaño del canvas si cambia el tamaño de la ventana
         window.addEventListener("resize", () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            estrellas = [];
+            resizeCanvas();
             crearEstrellas();
         });
     </script>
