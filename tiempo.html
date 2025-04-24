@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carta con estrellas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @font-face {
+            font-family: 'PlaywriteITModerna';
+            src: url('PlaywriteITModerna-ExtraLight.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #000000;
+            overflow: hidden;
+            position: relative;
+            font-family: 'PlaywriteITModerna', sans-serif;
+        }
+
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .carta-container {
+            position: relative;
+            padding: 30px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            margin: 40px 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            background: transparent;
+            border: none;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 255, 255, 0) transparent;
+        }
+
+        /* Estilos para scrollbar en navegadores webkit (Chrome, Safari) */
+        .carta-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .carta-container::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .carta-container::-webkit-scrollbar-thumb {
+            background-color: rgba(255, 255, 255, 0);
+            border-radius: 10px;
+        }
+
+        .carta-texto {
+            font-family: 'PlaywriteITModerna', sans-serif;
+            font-size: 16px;
+            line-height: 1.5;
+            text-align: center;
+            animation: cambioColorTexto 12s infinite alternate ease-in-out;
+            padding: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .carta-texto {
+                font-size: 14px;
+                padding: 5px;
+            }
+            
+            .carta-container {
+                padding: 20px;
+                width: 95%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .carta-texto {
+                font-size: 13px;
+                line-height: 1.4;
+            }
+            
+            .carta-container {
+                padding: 15px;
+                width: 98%;
+            }
+        }
+
+        @keyframes cambioColorTexto {
+            0% { color: #7DF9FF; }
+            25% { color: #48D1CC; }
+            50% { color: #00CED1; }
+            75% { color: #5F9EA0; }
+            100% { color: #B0E0E6; }
+        }
+
+        /* Music control */
+        .music-control {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 20;
+            transition: all 0.3s ease;
+        }
+
+        .music-control:hover {
+            background-color: rgba(0, 200, 200, 0.2);
+        }
+
+        .music-icon {
+            width: 20px;
+            height: 20px;
+            position: relative;
+        }
+
+        .music-on .bar1, .music-on .bar2, .music-on .bar3 {
+            position: absolute;
+            bottom: 0;
+            width: 4px;
+            background-color: #00FFFF;
+            animation: sound 1.5s infinite ease-in-out;
+        }
+
+        .music-on .bar1 {
+            height: 15px;
+            left: 0;
+            animation-delay: 0.2s;
+        }
+
+        .music-on .bar2 {
+            height: 20px;
+            left: 8px;
+            animation-delay: 0.8s;
+        }
+
+        .music-on .bar3 {
+            height: 10px;
+            left: 16px;
+            animation-delay: 0.5s;
+        }
+
+        .music-off .line1, .music-off .line2 {
+            position: absolute;
+            width: 20px;
+            height: 2px;
+            background-color: #00FFFF;
+            top: 50%;
+            left: 0;
+        }
+
+        .music-off .line1 {
+            transform: rotate(45deg);
+        }
+
+        .music-off .line2 {
+            transform: rotate(-45deg);
+        }
+
+        @keyframes sound {
+            0% { height: 5px; }
+            50% { height: 20px; }
+            100% { height: 5px; }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="fondo"></canvas>
+    
+    <div class="carta-container">
+        <div class="carta-texto">
+            <p>Wow, ya casi un año. Es impresionante… siento que ha sido un gran viaje hasta aquí, pero a la vez muy corto. Es curioso, pero cuando estoy contigo, parece que todo se detiene y nada importa. Y, al mismo tiempo, el tiempo se acelera, y lo que pareció solo cinco minutos, fueron horas y horas.</p>
+            <br>
+            <p>Las citas que hemos tenido a las cuales siempre llegamos al mismo lugar son simplemente impresionantes, porque en cada una de ellas, pese a terminar en el mismo sitio, recorrimos un camino diferente, con distintas pláticas y diferentes emociones.</p>
+            <br>
+            <p>Pese a lo efímero que se ha vuelto el mundo, yo quiero persistir a tu lado. Quiero seguir escuchando sobre las diabluras que lees, tus ideas, tus experiencias, tus sentimientos, algunas de tus indecisiones… y ver cómo sigues creciendo como persona.</p>
+            <br>
+            <p>Tal vez solo… estar a tu lado.</p>
+        </div>
+    </div>
+
+    <div class="music-control" id="musicControl">
+        <div class="music-icon music-on" id="musicIconOn">
+            <div class="bar1"></div>
+            <div class="bar2"></div>
+            <div class="bar3"></div>
+        </div>
+        <div class="music-icon music-off" id="musicIconOff" style="display: none;">
+            <div class="line1"></div>
+            <div class="line2"></div>
+        </div>
+    </div>
+
+    <audio id="bgMusic" loop>
+        <!-- Reemplaza este enlace por la URL de tu música -->
+        <source src="https://example.com/music.mp3" type="audio/mp3">
+        Tu navegador no soporta el elemento de audio.
+    </audio>
+
+    <script>
+        const canvas = document.getElementById("fondo");
+        const ctx = canvas.getContext("2d");
+        const bgMusic = document.getElementById("bgMusic");
+        const musicControl = document.getElementById("musicControl");
+        const musicIconOn = document.getElementById("musicIconOn");
+        const musicIconOff = document.getElementById("musicIconOff");
+        let musicPlaying = false;
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let estrellas = [];
+        const pixelSize = 4; // Tamaño de los "píxeles" para el efecto pixelado
+        let colorCycle = 0; // Variable para ciclar colores
+
+        // Array de colores para las estrellas azules
+        const paletaColores = [
+            { r: 0, g: 255, b: 255 },    // Aqua
+            { r: 32, g: 178, b: 170 },   // Light Sea Green
+            { r: 64, g: 224, b: 208 },   // Turquoise
+            { r: 0, g: 206, b: 209 },    // Dark Turquoise
+            { r: 127, g: 255, b: 212 }   // Aquamarine
+        ];
+
+        // Configuración de audio
+        bgMusic.volume = 0.5; // Volumen al 50%
+
+        // Control de música
+        musicControl.addEventListener("click", toggleMusic);
+
+        // Iniciar música automáticamente solo cuando el usuario interactúe con la página
+        document.addEventListener("click", function() {
+            if (!musicPlaying) {
+                toggleMusic();
+            }
+        }, { once: true });
+
+        function toggleMusic() {
+            if (musicPlaying) {
+                bgMusic.pause();
+                musicIconOn.style.display = "none";
+                musicIconOff.style.display = "block";
+            } else {
+                bgMusic.play().catch(e => console.log("Error al reproducir música:", e));
+                musicIconOn.style.display = "block";
+                musicIconOff.style.display = "none";
+            }
+            musicPlaying = !musicPlaying;
+        }
+
+        // Función para interpolar entre dos colores
+        function interpolateColor(color1, color2, factor) {
+            if (factor > 1) factor = 1;
+            if (factor < 0) factor = 0;
+            
+            const r = Math.round(color1.r + factor * (color2.r - color1.r));
+            const g = Math.round(color1.g + factor * (color2.g - color1.g));
+            const b = Math.round(color1.b + factor * (color2.b - color1.b));
+            
+            return `rgba(${r}, ${g}, ${b}`;
+        }
+
+        // Función para obtener un color actual basado en el ciclo
+        function obtenerColorActual(opacidad) {
+            const totalColores = paletaColores.length;
+            const posicionActual = colorCycle % totalColores;
+            const siguientePosicion = (posicionActual + 1) % totalColores;
+            
+            const factorColor = colorCycle % 1; // Parte decimal para transición suave
+            
+            const colorInicial = paletaColores[Math.floor(posicionActual)];
+            const colorFinal = paletaColores[Math.floor(siguientePosicion)];
+            
+            return `${interpolateColor(colorInicial, colorFinal, factorColor)}, ${opacidad})`;
+        }
+
+        function crearEstrellas() {
+            for (let i = 0; i < 200; i++) {
+                estrellas.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    radio: Math.random() * 2,
+                    opacidadBase: Math.random() * 0.5 + 0.4, // Opacidad base entre 0.4 y 0.9
+                    velocidadParpadeo: Math.random() * 0.003 + 0.001, // Velocidad de parpadeo MUY lenta
+                    factorParpadeo: Math.random(), // Fase inicial del parpadeo
+                    pixelado: Math.random() > 0.7 // 30% estrellas tendrán efecto pixelado
+                });
+            }
+        }
+
+        function dibujarEstrellas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Incrementar ciclo de color
+            colorCycle += 0.003; // Velocidad del cambio de color
+            if (colorCycle >= paletaColores.length) {
+                colorCycle = 0;
+            }
+
+            // Dibujar estrellas azules
+            estrellas.forEach(estrella => {
+                // Actualizar parpadeo muy lento
+                estrella.factorParpadeo += estrella.velocidadParpadeo;
+                if (estrella.factorParpadeo > 1) estrella.factorParpadeo = 0;
+                
+                // Opacidad variable con parpadeo muy sutil
+                const opacidadActual = estrella.opacidadBase * (0.9 + Math.sin(estrella.factorParpadeo * Math.PI * 2) * 0.1);
+                
+                // Color cambiante entre tonos de azul
+                ctx.fillStyle = obtenerColorActual(opacidadActual);
+                ctx.globalAlpha = 1;
+
+                if (estrella.pixelado) {
+                    // Dibujar estrella pixelada (cuadrado)
+                    const tamanoPx = Math.max(1, estrella.radio * 2);
+                    ctx.fillRect(
+                        Math.floor(estrella.x / pixelSize) * pixelSize, 
+                        Math.floor(estrella.y / pixelSize) * pixelSize, 
+                        tamanoPx, 
+                        tamanoPx);
+                    
+                    // A veces agregar un pequeño brillo
+                    if (Math.random() > 0.97) {
+                        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+                        ctx.fillRect(
+                            Math.floor(estrella.x / pixelSize) * pixelSize, 
+                            Math.floor(estrella.y / pixelSize) * pixelSize, 
+                            1, 1);
+                    }
+                } else {
+                    // Dibujar estrella normal (círculo)
+                    ctx.beginPath();
+                    ctx.arc(estrella.x, estrella.y, estrella.radio, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            });
+
+            ctx.globalAlpha = 1; // Restablecer opacidad
+        }
+
+        function animar() {
+            dibujarEstrellas();
+            requestAnimationFrame(animar);
+        }
+
+        crearEstrellas();
+        animar();
+
+        // Ajustar tamaño del canvas si cambia el tamaño de la ventana
+        window.addEventListener("resize", () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            estrellas = [];
+            crearEstrellas();
+        });
+    </script>
+</body>
+</html>
